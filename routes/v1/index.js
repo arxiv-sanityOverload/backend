@@ -1,14 +1,14 @@
-"use strict"
+"use strict";
 
-const express = require('express');
-const indexRoutes = require('./indexRoutes');
+const express = require("express");
+const indexRoutes = require("./indexRoutes");
 const router = express.Router();
 
 /**
  * GET v1/status
  */
-router.get('/status', (req, res) => res.json({status: 'OK'}));
+router.get("/ping", (req, res) => res.status(200).send("pong!"));
 
-router.use('/index', indexRoutes);
+router.use("/", indexRoutes);
 
 module.exports = router;

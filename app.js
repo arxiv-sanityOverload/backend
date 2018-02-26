@@ -1,76 +1,113 @@
-require('dotenv').config();
+require("dotenv").config();
 
 process.env.NODE_ENV = process.env.NODE_ENV || "staging";
 
-const express = require('express');
+const express = require("express");
 const appExpress = express();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const path = require("path");
 // const bugsnag = require("./utils/bugsnag");
 
+const initViewEngine = () => {
+  appExpress.set("views", path.join(__dirname, "views"));
+  appExpress.set("view engine", "ejs");
+};
+
 const initMiddleware = () => {
-    // parse body params and attach them to req.body
-    appExpress.use(bodyParser.json());
-    appExpress.use(bodyParser.urlencoded({ extended: true }));
-    appExpress.use(function (req, res, next) {
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Instance-Id');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
-        next();
-    });
+  // parse body params and attach them to req.body
+  appExpress.use(bodyParser.json());
+  appExpress.use(bodyParser.urlencoded({ extended: true }));
+  appExpress.use(cookieParser());
+  appExpress.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Instance-Id"
+    );
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+    next();
+  });
 };
 
 const initDB = () => {
-    require("./db/sql");
+  require("./db/mongo");
+};
+
+const initStaticPath = () => {
+  appExpress.use(express.static(path.join(__dirname, "public")));
+};
+
+const initPassport = () => {
+  const passport = require("passport");
+  const LocalStrategy = require("passport-local").Strategy;
+  appExpress.use(
+    require("express-session")({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false
+    })
+  );
+  appExpress.use(passport.initialize());
+  appExpress.use(passport.session());
+
+  // Passport init
+  const Account = require("./models/account");
+  passport.use(new LocalStrategy(Account.authenticate()));
+  passport.serializeUser(Account.serializeUser());
+  passport.deserializeUser(Account.deserializeUser());
 };
 
 const initRoutes = () => {
-    let routes = require('./routes/v1');
-    // mount api v1 routes
-    appExpress.use('/v1', routes);
+  let routes = require("./routes/v1");
+  // mount api v1 routes
+  appExpress.use("/v1", routes);
 };
 
 const initSubscribers = () => {
-    // let queueSubscribers = require('./queue');
-    // queueSubscribers.init();
-
-    // Instantly Start Ripple Block Subscriber
-    // require('./ripple_subscribers');
+  // let queueSubscribers = require('./queue');
+  // queueSubscribers.init();
+  // Instantly Start Ripple Block Subscriber
+  // require('./ripple_subscribers');
 };
 
 const initLogger = () => {
-    appExpress.use(require("./utils/logger").requestLogger);
+  appExpress.use(require("./utils/logger").requestLogger);
 };
 
 const initErrorMiddleware = () => {
-    // appExpress.use(bugsnag.errorHandler);
-    appExpress.use((err, req, res, next) => {
-        if (req.log) req.log.error(err);
-        if (process.env.NODE_ENV !== "development") {
-            delete err.details;
-            delete err.stack;
-        }
-        return res.status(+(err.status) || 500).json({
-            result: null,
-            error: err,
-            status: err.status
-        });
+  // appExpress.use(bugsnag.errorHandler);
+  appExpress.use((err, req, res, next) => {
+    if (req.log) req.log.error(err);
+    if (process.env.NODE_ENV !== "development") {
+      delete err.details;
+      delete err.stack;
+    }
+    return res.status(+err.status || 500).json({
+      result: null,
+      error: err,
+      status: err.status
     });
+  });
 };
 
 const initHandlers = () => {
-    initLogger();
-    initDB();
-    initMiddleware();
-    initRoutes();
-    initErrorMiddleware();
-    initSubscribers();
+  initViewEngine();
+  initLogger();
+  initDB();
+  initMiddleware();
+  initPassport();
+  initStaticPath();
+  initRoutes();
+  initErrorMiddleware();
+  initSubscribers();
 };
 
 const init = () => {
-    initHandlers();
+  initHandlers();
 };
 
 module.exports = {
-    appExpress,
-    init
+  appExpress,
+  init
 };
