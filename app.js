@@ -75,6 +75,25 @@ const initLogger = () => {
   appExpress.use(require("./utils/logger").requestLogger);
 };
 
+const joiError = () => {
+  appExpress.use((err, req, res, next) => {
+    if (err.error.isJoi) {
+      // we had a joi error, let's return a custom 400 json response
+      res.status(400).json({
+        result: null,
+        status: 400,
+        error: {
+          type: err.type,
+          message: JSON.parse(JSON.stringify(err.error))
+        }
+      });
+    } else {
+      // pass on to another error handler
+      next(err);
+    }
+  });
+};
+
 const initErrorMiddleware = () => {
   // appExpress.use(bugsnag.errorHandler);
   appExpress.use((err, req, res, next) => {
@@ -99,6 +118,7 @@ const initHandlers = () => {
   initPassport();
   initStaticPath();
   initRoutes();
+  joiError();
   initErrorMiddleware();
   initSubscribers();
 };

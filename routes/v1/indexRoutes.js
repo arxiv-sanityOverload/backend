@@ -7,31 +7,40 @@ const passport = require("passport");
 const Account = require("./../../models/account");
 const responseFormatter = require("./../../utils/responseFormatter");
 
-router.route("/register").post((req, res, next) => {
-  const unique_id = require("uuid/v4")();
-  Account.register(
-    new Account({
-      username: req.body.username,
-      email: req.body.email,
-      unique_id
-    }),
-    req.body.password,
-    (err, result) => {
-      if (err) {
-        return next(err);
-      }
-      passport.authenticate("local")(req, res, () => {
-        const { username, email } = result;
-        return responseFormatter.formatResponse(res, {
-          username,
-          email
-        });
-      });
-    }
-  );
-});
+// const Joi = require("joi");
+const validator = require("express-joi-validation")({ passError: true });
+const {
+  registerSchema,
+  loginSchema
+} = require("./../../validators/user.validator");
 
-router.route("/login").post((req, res, next) => {
+router
+  .route("/register")
+  .post(validator.body(registerSchema), (req, res, next) => {
+    const unique_id = require("uuid/v4")();
+    Account.register(
+      new Account({
+        username: req.body.username,
+        email: req.body.email,
+        unique_id
+      }),
+      req.body.password,
+      (err, result) => {
+        if (err) {
+          return next(err);
+        }
+        passport.authenticate("local")(req, res, () => {
+          const { username, email } = result;
+          return responseFormatter.formatResponse(res, {
+            username,
+            email
+          });
+        });
+      }
+    );
+  });
+
+router.route("/login").post(validator.body(loginSchema), (req, res, next) => {
   passport.authenticate("local")(req, res, () => {
     const jwt = require("jsonwebtoken");
     const token = jwt.sign(
