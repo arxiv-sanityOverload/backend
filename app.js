@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 // const bugsnag = require("./utils/bugsnag");
+const swagger = require("swagger-express");
 
 const initViewEngine = () => {
   appExpress.set("views", path.join(__dirname, "views"));
@@ -28,6 +29,25 @@ const initMiddleware = () => {
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
     next();
   });
+};
+
+const initSwagger = () => {
+  appExpress.use(
+    swagger.init(appExpress, {
+      apiVersion: "1.0",
+      swaggerVersion: "1.0",
+      swaggerURL: "/swagger",
+      swaggerJSON: "/api-docs.json",
+      swaggerUI: "./public/swagger/",
+      basePath: "http://localhost:3000",
+      info: {
+        title: "swagger-express",
+        description: "Swagger + Express = {swagger-express}"
+      },
+      apis: ["./api.yml"],
+      middleware: function(req, res) {}
+    })
+  );
 };
 
 const initDB = () => {
@@ -61,7 +81,7 @@ const initPassport = () => {
 const initRoutes = () => {
   let routes = require("./routes/v1");
   // mount api v1 routes
-  appExpress.use("/v1", routes);
+  appExpress.use("/api/v1", routes);
 };
 
 const initSubscribers = () => {
@@ -77,7 +97,7 @@ const initLogger = () => {
 
 const joiError = () => {
   appExpress.use((err, req, res, next) => {
-    if (err.error.isJoi) {
+    if (err.error && err.error.isJoi) {
       // we had a joi error, let's return a custom 400 json response
       res.status(400).json({
         result: null,
@@ -117,6 +137,7 @@ const initHandlers = () => {
   initMiddleware();
   initPassport();
   initStaticPath();
+  initSwagger();
   initRoutes();
   joiError();
   initErrorMiddleware();
