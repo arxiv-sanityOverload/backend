@@ -4,8 +4,10 @@ const indexService = require("../services/index.service");
 const responseFormatter = require("../utils/responseFormatter");
 
 const register = (req, res, next) => {
+  const { username, email, fullName, password } = req.body;
+  const newUser = { username, email, fullName, password };
   indexService
-    .register(req, res)
+    .register(req, newUser)
     .then(result => {
       const { username, email } = result;
       return responseFormatter.formatResponse(res, { username, email });

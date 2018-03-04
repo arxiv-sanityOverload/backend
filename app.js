@@ -51,7 +51,7 @@ const initSwagger = () => {
 };
 
 const initDB = () => {
-  require("./db/mongo");
+  require("./db/sql");
 };
 
 const initStaticPath = () => {
@@ -59,8 +59,6 @@ const initStaticPath = () => {
 };
 
 const initPassport = () => {
-  const passport = require("passport");
-  const LocalStrategy = require("passport-local").Strategy;
   appExpress.use(
     require("express-session")({
       secret: process.env.SESSION_SECRET,
@@ -68,14 +66,7 @@ const initPassport = () => {
       saveUninitialized: false
     })
   );
-  appExpress.use(passport.initialize());
-  appExpress.use(passport.session());
-
-  // Passport init
-  const Account = require("./models/account");
-  passport.use(new LocalStrategy(Account.authenticate()));
-  passport.serializeUser(Account.serializeUser());
-  passport.deserializeUser(Account.deserializeUser());
+  require("./helpers/passport")(appExpress);
 };
 
 const initRoutes = () => {
