@@ -1,65 +1,95 @@
-"use strict";
+'use strict'
 
-const passport = require("passport");
-const bcrypt = require("bcrypt");
-const { User } = require("./../models/model");
+const URI = require('../config/uri')
+const models = require('../models/model')
+const sequelize = require('../db/sql')
+const Sequelize = require('sequelize')
 
-const register = (req, payload) => {
-  return new Promise((resolve, reject) => {
-    const unique_id = require("uuid/v4")();
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(payload.password, salt);
-    const { username, email, fullName, password } = payload;
-    const newUser = {
-      username,
-      email,
-      fullName,
-      password: hashedPassword,
-      salt
-    };
-    User.create(newUser)
-      .then(result => {
-        return resolve(result);
-      })
-      .catch(err => {
-        return reject({ ...err, status: 409 });
-      });
-  });
-};
+const getIndex = (req) => {
+    let requestObject = URI.getIndex
+    const result = "Success"
+    req.log.info({ result }, "[index.service-getIndex] requestCommand : " + requestObject.endpoint)
+    return Promise.resolve(result)
+}
 
-const login = (req, res) => {
-  return new Promise((resolve, reject) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return reject(err);
-      }
-      if (!user) {
-        return reject({
-          message: "Authentication failed",
-          status: 400
-        });
-      }
-      req.login(user, loginErr => {
-        if (loginErr) {
-          return reject(loginErr);
+const getUsers = (req, id) => {
+    // db operations
+    x.findById(id, (err, response) => {
+        if (err) {
+            return Promise.reject(err)
         }
-        const jwt = require("jsonwebtoken");
-        const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-          expiresIn: "365d"
-        });
-        const payload = {
-          id: req.user.id,
-          username: req.user.username,
-          email: req.user.email,
-          token
-        };
-        return resolve(payload);
-      });
-    })(req, res);
-  });
-};
+        return Promise.resolve(response)
+    })
+}
+
+const getCategories = () => {
+    return new Promise((resolve, reject) => {
+        models.category.findAll({ attributes: ['category'] })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
+
+const getSubCategories = (req) => {
+    let categ = req.params.category
+    return new Promise((resolve, reject) => {
+        models.category.findAll({ attributes: ['sub_categories'], where: { category: categ } })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
+
+const getCategoryRecents = (req, limit, offset) => {
+    let categ = req.params.category
+    return new Promise((resolve, reject) => {
+        models.METADATA.findAll({
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link', 'feed_title', 'feed_upadted', 'opensearch_totalresults', 'opensearch_itemsperpage', 'opensearch_startindex'],
+            where: { primary_category: { $like: categ + '%' } },
+            order: [['published', 'DESC']],
+            limit: limit,
+            offset: offset
+        })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
+
+const getSubCategoryRecents = (req, limit, offset) => {
+    let categ = req.params.subcategory
+    return new Promise((resolve, reject) => {
+        models.METADATA.findAll({
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link', 'feed_title', 'feed_upadted', 'opensearch_totalresults', 'opensearch_itemsperpage', 'opensearch_startindex'],
+            where: { primary_category: categ },
+            order: [['published', 'DESC']],
+            limit: limit,
+            offset: offset
+        })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
 
 module.exports = {
-  login,
-  register
-};
+    getIndex,
+    getUsers,
+    getCategories,
+    getSubCategories,
+    getCategoryRecents,
+    getSubCategoryRecents
+}

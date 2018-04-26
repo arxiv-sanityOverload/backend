@@ -1,9 +1,9 @@
 "use strict";
 
 module.exports = {
-  host: process.env.DB_HOST,
-  name: process.env.DB_NAME,
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  port: +process.env.DB_PORT
+    host: process.env.MYSQL_DB_HOST,
+    name: process.env.MYSQL_DB_NAME,
+    username: process.env.MYSQL_DB_USERNAME,
+    password: process.env.MYSQL_DB_PASSWORD,
+    port: +process.env.MYSQL_DB_PORT
 };
