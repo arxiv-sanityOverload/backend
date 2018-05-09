@@ -1,28 +1,31 @@
-"use strict";
+"use strict"
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const indexController = require("./../../controllers/index.controller");
+const indexController = require('../../controllers/index.controller')
+// router
+//     .route('/nested')
+//     .get((req, res, next) => {
+//         res.json({status: 'ok', msg: "Suyal"});
+//     });
 
-const validator = require("express-joi-validation")({ passError: true });
-const {
-  registerSchema,
-  loginSchema
-} = require("./../../validators/user.validator");
+router.get('/categories', (req, res, next) => {
+    indexController.getCategories(req, res, next)
+})
 
-router
-  .route("/register")
-  .post(validator.body(registerSchema), (req, res, next) => {
-    indexController.register(req, res, next);
-  });
+router.get('/:category/subcategories', (req, res, next) => {
+    indexController.getSubCategories(req, res, next)
+})
 
-router.route("/login").post(validator.body(loginSchema), (req, res, next) => {
-  indexController.login(req, res, next);
-});
+router.get('/:category/recents', (req, res, next) => {
+    let limit = 10
+    let offset = 10
+    indexController.getCategoryRecents(req, res, next, limit, offset)
+})
 
-router.route("/logout").get((req, res, next) => {
-  req.logout();
-  return responseFormatter.formatResponse(res, "Logout Successfull");
-});
-
+router.get('/:subcategory/subcategory/recents', (req, res, next) => {
+    let limit = 10
+    let offset = 10
+    indexController.getSubCategoryRecents(req, res, next, limit, offset)
+})
 module.exports = router;
