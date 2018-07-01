@@ -9,7 +9,6 @@ const {
  * GET v1/status
  */
 router.get("/ping", (req, res) => res.status(200).send("pong!"));
-router.get("/", (req, res) => res.status(200).send("Welcome to arXivOverload!"));
 
 // router.use("/", authRoutes);
 
