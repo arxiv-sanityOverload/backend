@@ -59,7 +59,7 @@ const initStaticPath = () => {
 const initRoutes = () => {
   let routes = require("./routes/v1");
   // mount api v1 routes
-  appExpress.get("/", (req, res, next) => {
+  appExpress.get("/test", (req, res, next) => {
     res.status(200).send("Welcome to arXivOverload!");
   });
   appExpress.use("/api/v1", routes);
