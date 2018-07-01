@@ -5,7 +5,7 @@ const appExpress = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const bugsnag = require("./utils/bugsnag");
+// const bugsnag = require("./utils/bugsnag");
 // const swagger = require("swagger-express");
 
 const initViewEngine = () => {
@@ -18,7 +18,7 @@ const initMiddleware = () => {
   appExpress.use(bodyParser.json());
   appExpress.use(bodyParser.urlencoded({ extended: true }));
   appExpress.use(cookieParser());
-  appExpress.use(function(req, res, next) {
+  appExpress.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", req.headers.origin);
     res.header(
       "Access-Control-Allow-Headers",
@@ -113,7 +113,7 @@ const publishers = () => {
 };
 
 const initHandlers = () => {
-  initBugsnag();
+  // initBugsnag();
   initViewEngine();
   initLogger();
   // initDB();
