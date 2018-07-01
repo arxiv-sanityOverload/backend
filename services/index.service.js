@@ -51,7 +51,7 @@ const getCategoryRecents = (req, limit, offset) => {
     let categ = req.params.category
     return new Promise((resolve, reject) => {
         models.METADATA.findAll({
-            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link', 'feed_title', 'feed_upadted', 'opensearch_totalresults', 'opensearch_itemsperpage', 'opensearch_startindex'],
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
             where: { primary_category: { $like: categ + '%' } },
             order: [['published', 'DESC']],
             limit: limit,
@@ -70,7 +70,7 @@ const getSubCategoryRecents = (req, limit, offset) => {
     let categ = req.params.subcategory
     return new Promise((resolve, reject) => {
         models.METADATA.findAll({
-            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link', 'feed_title', 'feed_upadted', 'opensearch_totalresults', 'opensearch_itemsperpage', 'opensearch_startindex'],
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
             where: { primary_category: categ },
             order: [['published', 'DESC']],
             limit: limit,

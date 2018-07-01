@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../db/sql')
 
-const METADATA = sequelize.define('metadata', {
+const METADATA = sequelize.define('paper_metadata', {
     'arxiv_id': Sequelize.STRING(40),
     'title': Sequelize.TEXT,
     'abstract': Sequelize.TEXT,
@@ -15,11 +15,6 @@ const METADATA = sequelize.define('metadata', {
     'comment': Sequelize.TEXT,
     'abs_page_link': Sequelize.STRING(45),
     'pdf_link': Sequelize.STRING(45),
-    'feed_title': Sequelize.TEXT,
-    'feed_upadted': Sequelize.TEXT,
-    'opensearch_totalresults': Sequelize.STRING(45),
-    'opensearch_itemsperpage': Sequelize.STRING(45),
-    'opensearch_startindex': Sequelize.STRING(45)
 },
     {
         timestamps: false
