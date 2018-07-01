@@ -1,10 +1,6 @@
 "use strict";
 
 const express = require("express");
-const authRoutes = require("./authRoutes");
-const binanceRoutes = require("./binanceRoutes");
-const tradeRoutes = require("./tradeRoutes");
-const subscribeRoutes = require("./subscribeRoutes");
 const router = express.Router();
 const {
   validate
