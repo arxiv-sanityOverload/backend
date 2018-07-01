@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Mrdcode4$",
+    "database": "arxivOverload",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "Mrdcode4$",
+    "database": "zingniz_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": "mysql"
+  }
+}
