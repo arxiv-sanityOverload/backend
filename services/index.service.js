@@ -64,8 +64,6 @@ const getSubCategoryRecents = (req, limit, offset) => {
 module.exports = {
     getIndex,
     getUsers,
-    getCategories,
-    getSubCategories,
     getCategoryRecents,
     getSubCategoryRecents
 }
