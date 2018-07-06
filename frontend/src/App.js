@@ -30,21 +30,21 @@ class App extends Component {
    }
   render() {
     return (
-      <div className="App">
-        <NavigationBar />
-        <BrowserRouter>
-          <div>
-            <Route exact={true} path="/category" component={Category} />
-            <Route exact={true} path="/recent" component={Recent} />
-            <Route exact={true} path="/community" component={Community} />
-            <Route exact={true} path="/contact" component={Contact} />
-            <Route exact={true} path="/donate" component={Donate} />
-          </div>
-        </BrowserRouter>
-        <p>
-          Category Status code : {this.state.category.status}
-        </p>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <NavigationBar />
+            <div>
+              <Route exact={true} path="/category" component={Category} />
+              <Route exact={true} path="/recent" component={Recent} />
+              <Route exact={true} path="/community" component={Community} />
+              <Route exact={true} path="/contact" component={Contact} />
+              <Route exact={true} path="/donate" component={Donate} />
+            </div>
+          <p>
+            Category Status code : {this.state.category.status}
+          </p>
+        </div>
+      </BrowserRouter>
     );
   }
 }
