@@ -20,7 +20,7 @@ const METADATA = sequelize.define('paper_metadata', {
         timestamps: false
     })
 
-const category = sequelize.define('categ', {
+const category = sequelize.define('categories', {
     'category': Sequelize.STRING(45),
     'sub_categories': Sequelize.JSON,
     'category_name': Sequelize.STRING(45)

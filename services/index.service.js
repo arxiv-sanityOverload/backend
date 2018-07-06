@@ -22,30 +22,6 @@ const getUsers = (req, id) => {
     })
 }
 
-const getCategories = () => {
-    return new Promise((resolve, reject) => {
-        models.category.findAll({ attributes: ['category'] })
-            .then(result => {
-                resolve(result)
-            })
-            .catch(err => {
-                reject(err)
-            })
-    })
-}
-
-const getSubCategories = (req) => {
-    let categ = req.params.category
-    return new Promise((resolve, reject) => {
-        models.category.findAll({ attributes: ['sub_categories'], where: { category: categ } })
-            .then(result => {
-                resolve(result)
-            })
-            .catch(err => {
-                reject(err)
-            })
-    })
-}
 
 const getCategoryRecents = (req, limit, offset) => {
     let categ = req.params.category
