@@ -15,9 +15,14 @@ class App extends Component {
   state = {category: []}
 
   componentDidMount() {
-    fetch('/v1/categories')
-      .then(res => res.json())
-    //fetch('/v1/cs/recent')
+    // fetch('http://export.arxiv.org/api/query?search_query=all:electron&start=0&max_results=10')
+    // //fetch('/v1/categories')
+    //   .then(
+    //     res => {
+    //       console.log(res)
+    //       res.json()
+    //     })
+    fetch('/v1/cs/recent')
     .then(category => {  
         this.setState({ category })
         console.log(this.state.category)
@@ -40,9 +45,9 @@ class App extends Component {
               <Route exact={true} path="/contact" component={Contact} />
               <Route exact={true} path="/donate" component={Donate} />
             </div>
-          <p>
+          {/* <p>
             Category Status code : {this.state.category.status}
-          </p>
+          </p> */}
         </div>
       </BrowserRouter>
     );
