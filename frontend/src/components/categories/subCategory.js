@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './opinionated.css';
 import './react-treeview.css';
-import { subCategoryAction } from '../../actions/subCategoryAction'
+import { fetchSubCategory } from '../../actions/subCategoryAction'
 import TreeView from 'react-treeview';
 
 const dataSource = [
@@ -22,7 +22,7 @@ const dataSource = [
   {
     type: 'Condensed Matter',
     collapsed: false,
-    code: '',
+    code: 'cond-mat',
     sub: [
       {name: 'Disordered Systems and Neural Networks', code: 'cond-mat.dis-nn', collapsed: false},
       {name: 'Mesoscale and Nanoscale Physics', code: 'cond-mat.mes-hall', collapsed: false},
@@ -147,6 +147,11 @@ class SubCategory extends React.Component {
     this.state = { 
       subCategoryCode: ''
     };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(category, subCategory) {
+    return fetchSubCategory(category, subCategory);
   }
   // componentDidMount() {
     
@@ -160,16 +165,18 @@ class SubCategory extends React.Component {
           return (
             <TreeView key={type + '|' + i} nodeLabel={label} defaultCollapsed={true}>
               {node.sub.map(sub => {
-                const label2 = <span className="node">{sub.name}</span>;
-                const subCode = `${node.code}/${sub.code}`;
+                // const label2 = <span className="node">{sub.name}</span>;
+                const subCode = `/${node.code}/${sub.code}`;
                 return (
                   <div className="info">
                     <a
                       href={subCode}
-                      onCLick = {() => this.setState({
-                                          subCategoryCode: sub.code
-                                        })
-                      }
+                      // onCLick = {() => this.setState({
+                      //                     subCategoryCode: sub.code
+                      //                   })
+                      // }
+                      onCLick = {this.handleClick(node.code, sub.code)}
+                      
                     >{sub.name}
                     </a>
                     <br /><br />
@@ -192,7 +199,7 @@ const mapStateToProps = state => ({
  })
 
 const mapDispatchToProps = dispatch => ({
-  subCategoryAction: () => dispatch(subCategoryAction())
+  fetchSubCategory: (category, subCategory) => dispatch(fetchSubCategory(category, subCategory))
  })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubCategory);
