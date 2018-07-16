@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './opinionated.css';
 import './react-treeview.css';
-
+import { subCategoryAction } from '../../actions/subCategoryAction'
 import TreeView from 'react-treeview';
 
 const dataSource = [
@@ -140,7 +141,16 @@ const dataSource = [
   },
 ];
 
-class SubCategory extends React.Component{
+class SubCategory extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      subCategoryCode: ''
+    };
+  }
+  // componentDidMount() {
+    
+  // }
   render() {
     return (
       <div className="b">
@@ -149,12 +159,24 @@ class SubCategory extends React.Component{
           const label = <span className="node">{type}</span>;
           return (
             <TreeView key={type + '|' + i} nodeLabel={label} defaultCollapsed={true}>
-              {node.sub.map(person => {
-                const label2 = <span className="node">{person.name}</span>;
+              {node.sub.map(sub => {
+                const label2 = <span className="node">{sub.name}</span>;
+                const subCode = `${node.code}/${sub.code}`;
                 return (
-                  <TreeView nodeLabel={label2} key={person.name} defaultCollapsed={true}>
-                    <div className="info">{person.code}</div>
-                  </TreeView>
+                  <div className="info">
+                    <a
+                      href={subCode}
+                      onCLick = {() => this.setState({
+                                          subCategoryCode: sub.code
+                                        })
+                      }
+                    >{sub.name}
+                    </a>
+                    <br /><br />
+                  {/*<TreeView nodeLabel={label2} key={sub.name} defaultCollapsed={true}>
+                    <div className="info">{sub.code}</div>
+                  </TreeView>*/}
+                </div>
                 );
               })}
             </TreeView>
@@ -165,4 +187,12 @@ class SubCategory extends React.Component{
   }
 }
 
-export default SubCategory;
+const mapStateToProps = state => ({
+  ...state
+ })
+
+const mapDispatchToProps = dispatch => ({
+  subCategoryAction: () => dispatch(subCategoryAction())
+ })
+
+export default connect(mapStateToProps, mapDispatchToProps)(SubCategory);
