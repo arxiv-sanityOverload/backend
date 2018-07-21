@@ -150,12 +150,10 @@ class SubCategory extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(category, subCategory) {
-    return fetchSubCategory(category, subCategory);
+  handleClick(subCategory) {
+    this.props.fetchSubCategory(subCategory);
   }
-  // componentDidMount() {
-    
-  // }
+
   render() {
     return (
       <div className="b">
@@ -166,16 +164,17 @@ class SubCategory extends React.Component {
             <TreeView key={type + '|' + i} nodeLabel={label} defaultCollapsed={true}>
               {node.sub.map(sub => {
                 // const label2 = <span className="node">{sub.name}</span>;
-                const subCode = `/${node.code}/${sub.code}`;
+                const subCode = `http://localhost:3000/v1/${sub.code}/recents`;
                 return (
                   <div className="info">
                     <a
-                      href={subCode}
+                      href="#"
+                      //href={subCode}
                       // onCLick = {() => this.setState({
                       //                     subCategoryCode: sub.code
                       //                   })
                       // }
-                      onCLick = {this.handleClick(node.code, sub.code)}
+                      onCLick = {this.handleClick(sub.code)}
                       
                     >{sub.name}
                     </a>
@@ -194,12 +193,12 @@ class SubCategory extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
- })
+// const mapStateToProps = state => ({
+//   ...state
+//  })
 
 const mapDispatchToProps = dispatch => ({
-  fetchSubCategory: (category, subCategory) => dispatch(fetchSubCategory(category, subCategory))
+  fetchSubCategory: (subCategory) => dispatch(fetchSubCategory(subCategory))
  })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubCategory);
+export default connect(null, mapDispatchToProps)(SubCategory);

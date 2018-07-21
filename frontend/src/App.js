@@ -14,21 +14,21 @@ class App extends Component {
 
   state = {category: []}
 
-  componentDidMount() {
-    // fetch('http://export.arxiv.org/api/query?search_query=all:electron&start=0&max_results=10')
-    // //fetch('/v1/categories')
-    //   .then(
-    //     res => {
-    //       console.log(res)
-    //       res.json()
-    //     })
-    fetch('/v1/cs/recent')
-    .then(category => {  
-        this.setState({ category })
-        console.log(this.state.category)
-      }
-      );
-  }
+  // componentDidMount() {
+  //   // fetch('http://export.arxiv.org/api/query?search_query=all:electron&start=0&max_results=10')
+  //   // //fetch('/v1/categories')
+  //   //   .then(
+  //   //     res => {
+  //   //       console.log(res)
+  //   //       res.json()
+  //   //     })
+  //   fetch('/v1/cs/recent')
+  //   .then(category => {  
+  //       this.setState({ category })
+  //       console.log(this.state.category)
+  //     }
+  //     );
+  // }
 
   simpleAction = (event) => {
     this.props.simpleAction();
