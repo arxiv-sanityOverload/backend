@@ -6,7 +6,8 @@ export default (state = {}, action) => {
        }
       case 'SUBCATEGORY':
         return {
-          result: action.payload
+          ...state,
+          result: action.subCategory
       }
       default:
         return state

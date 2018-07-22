@@ -168,8 +168,8 @@ class SubCategory extends React.Component {
                 return (
                   <div className="info">
                     <a
-                      href="#"
-                      //href={subCode}
+                      //href="#"
+                      href={subCode}
                       // onCLick = {() => this.setState({
                       //                     subCategoryCode: sub.code
                       //                   })
