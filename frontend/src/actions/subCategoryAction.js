@@ -25,6 +25,10 @@
       return dispatch({
         type: 'SUBCATEGORY',
         subCategory: axios.get(`http://localhost:3000/v1/${subCategory}/recents`)
+      }).then(result => {
+        console.log(result);
+      }).catch(error => {
+        console.log(error);
       });
     };
   }
