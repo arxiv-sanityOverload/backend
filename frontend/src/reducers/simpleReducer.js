@@ -1,8 +1,8 @@
-export default (state = {
+export function simpleReducer (state = {
     processing: false,
     data: null,
     error: false
-}, action) => {
+}, action) {
     switch (action.type) {
       case 'CATEGORY':
         return {
@@ -19,7 +19,7 @@ export default (state = {
         return {
           ...state,
             processing: false,
-            data: action.payload.data,
+            data: action.subCategory,
       }
             
       case 'SUBCATEGORY_REJECTED':
