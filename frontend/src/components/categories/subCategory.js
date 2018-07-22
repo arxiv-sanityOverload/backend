@@ -147,10 +147,9 @@ class SubCategory extends React.Component {
     this.state = { 
       subCategoryCode: ''
     };
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(subCategory) {
+  handleClick = (e, subCategory) => {
     this.props.fetchSubCategory(subCategory);
   }
 
@@ -174,7 +173,7 @@ class SubCategory extends React.Component {
                       //                     subCategoryCode: sub.code
                       //                   })
                       // }
-                      onCLick = {this.handleClick(sub.code)}
+                      onCLick = {(e) => this.handleClick(e, sub.code)}
                       
                     >{sub.name}
                     </a>
