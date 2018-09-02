@@ -7,4 +7,3 @@ node_modules/
 .env
 *.rdb
 backend_hdi_settings.json
-package-lock.json
