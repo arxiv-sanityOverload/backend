@@ -20,6 +20,7 @@ router.get('/:category/subcategories', (req, res, next) => {
 router.get('/:category/recents', (req, res, next) => {
     let limit = Number(req.query.limit);
     let offset = Number(req.query.offset);
+    
     indexController.getCategoryRecents(req, res, next, limit, offset)
 })
 
