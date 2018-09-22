@@ -6,3 +6,4 @@ node_modules/
 .vscode
 .env
 *.rdb
+backend_hdi_settings.json

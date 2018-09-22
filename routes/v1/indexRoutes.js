@@ -1,5 +1,5 @@
-"use strict"
 
+"use strict"
 const express = require('express');
 const router = express.Router();
 const indexController = require('../../controllers/index.controller')
@@ -18,14 +18,15 @@ router.get('/:category/subcategories', (req, res, next) => {
 })
 
 router.get('/:category/recents', (req, res, next) => {
-    let limit = 10
-    let offset = 10
+    let limit = Number(req.query.limit);
+    let offset = Number(req.query.offset);
+    
     indexController.getCategoryRecents(req, res, next, limit, offset)
 })
 
 router.get('/:subcategory/subcategory/recents', (req, res, next) => {
-    let limit = 10
-    let offset = 10
+    let limit = Number(req.query.limit);
+    let offset = Number(req.query.offset);
     indexController.getSubCategoryRecents(req, res, next, limit, offset)
 })
 module.exports = router;
