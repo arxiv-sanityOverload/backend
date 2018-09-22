@@ -18,17 +18,28 @@
 //       }
 //   }
 
-  import axios from "axios";
+import axios from "axios";
 
-  export function fetchSubCategory(subCategory) {
-    return dispatch => {
-      return dispatch({
-        type: 'SUBCATEGORY',
-        subCategory: axios.get(`http://localhost:3000/v1/${subCategory}/recents`)
-      }).then(result => {
-        console.log(result);
-      }).catch(error => {
-        console.log(error);
-      });
-    };
-  }
+export function fetchSubCategory(subCategory) {
+  return dispatch => {
+    return dispatch({
+      type: 'SUBCATEGORY',
+      subCategory: axios.get(`http://localhost:3000/v1/${subCategory}/recents`)
+    }).then(result => {
+      console.log(result);
+    }).catch(error => {
+      console.log(error);
+    });
+  };
+}
+
+export function getUserData() {
+  return dispatch => {
+    return dispatch({
+      type: "GET_USER_DATA",
+      payload: axios.get(apiEndpoints.getUserData)
+    }).then(data => {
+      return dispatch(getNotifications({}, data.action.payload.data.uniqueId));
+    });
+  };
+}
