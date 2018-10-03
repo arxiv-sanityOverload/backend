@@ -28,7 +28,8 @@ const getCategoryRecents = (req, limit, offset) => {
     return new Promise((resolve, reject) => {
         models.METADATA.findAll({
             attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
-            where: { primary_category: { $like: categ + '%' } },
+            where: { primary_category: { $like: categ + '%' },
+                    published: datetime },
             order: [['published', 'DESC']],
             limit: limit,
             offset: offset
@@ -45,9 +46,12 @@ const getCategoryRecents = (req, limit, offset) => {
 const getSubCategoryRecents = (req, limit, offset) => {
     let categ = req.params.subcategory
     return new Promise((resolve, reject) => {
+        var datetime = new Date();
+        console.log(datetime);
         models.METADATA.findAll({
             attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
-            where: { primary_category: categ },
+            where: { primary_category: categ,
+                    published: datetime},
             order: [['published', 'DESC']],
             limit: limit,
             offset: offset
