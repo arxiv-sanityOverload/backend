@@ -27,9 +27,24 @@ const getSubCategoryRecents = (req, res, next, limit, offset) => {
         .catch(error => responseFormatter.formatResponse(res, error))
 }
 
+
+const getSortedCategoryRecents = (req, res, next, limit, offset) => {
+    return indexService.getSortedCategoryRecents(req, limit, offset)
+        .then(result => responseFormatter.formatResponse(res, result))
+        .catch(error => responseFormatter.formatResponse(res, error))
+}
+
+const getSortedSubCategoryRecents = (req, res, next, limit, offset) => {
+    return indexService.getSortedSubCategoryRecents(req, limit, offset)
+        .then(result => responseFormatter.formatResponse(res, result))
+        .catch(error => responseFormatter.formatResponse(res, error))
+}
+
 module.exports = {
     getCategories,
     getSubCategories,
     getCategoryRecents,
-    getSubCategoryRecents
+    getSubCategoryRecents,
+    getSortedCategoryRecents,
+    getSortedSubCategoryRecents
 }

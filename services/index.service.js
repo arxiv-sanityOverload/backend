@@ -65,9 +65,55 @@ const getSubCategoryRecents = (req, limit, offset) => {
     })
 }
 
+const getSortedCategoryRecents = (req, limit, offset) => {
+    let categ = req.params.category
+    return new Promise((resolve, reject) => {
+        models.METADATA.findAll({
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
+            where: {
+                primary_category: { $like: categ + '%' }
+            },
+            order: [['published', 'DESC']],
+            limit: limit,
+            offset: offset
+        })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
+
+const getSortedSubCategoryRecents = (req, limit, offset) => {
+    let categ = req.params.subcategory
+    return new Promise((resolve, reject) => {
+        var datetime = new Date();
+        console.log(datetime);
+        models.METADATA.findAll({
+            attributes: ['arxiv_id', 'title', 'abstract', 'primary_category', 'all_categories', 'author', 'last_author', 'authors', 'published', 'journal_ref', 'comment', 'abs_page_link', 'pdf_link'],
+            where: {
+                primary_category: categ
+            },
+            order: [['published', 'DESC']],
+            limit: limit,
+            offset: offset
+        })
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
+
 module.exports = {
     getIndex,
     getUsers,
     getCategoryRecents,
-    getSubCategoryRecents
+    getSubCategoryRecents,
+    getSortedCategoryRecents,
+    getSortedSubCategoryRecents   
 }

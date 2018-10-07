@@ -29,4 +29,17 @@ router.get('/:subcategory/subcategory/recents', (req, res, next) => {
     let offset = Number(req.query.offset);
     indexController.getSubCategoryRecents(req, res, next, limit, offset)
 })
+
+router.get('/:category/sorted', (req, res, next) => {
+    let limit = Number(req.query.limit);
+    let offset = Number(req.query.offset);
+
+    indexController.getSortedCategoryRecents(req, res, next, limit, offset)
+})
+
+router.get('/:subcategory/subcategory/sorted', (req, res, next) => {
+    let limit = Number(req.query.limit);
+    let offset = Number(req.query.offset);
+    indexController.getSortedSubCategoryRecents(req, res, next, limit, offset)
+})
 module.exports = router;
